@@ -1,0 +1,92 @@
+create database sekolahku2;
+
+use sekolahku2;
+
+create table users(
+id int(11) auto_increment primary key,
+username varchar(50) not null,
+email varchar(50) not null,
+password varchar(50) not null,
+created_at timestamp default current_timestamp,
+updated_at timestamp default current_timestamp on update current_timestamp
+);
+
+desc users;
+
+insert into users (username, email, password) values
+('Andi', 'hani@gmail.com', '12345'),
+('Budi', 'budi@gmail.com', '67890'),
+('Caca', 'caca@gmail.com', 'abcde'),
+('Deni', 'deni@gmail.com', 'fghij'),
+('Euis', 'euis@gmail.com', 'klmno'),
+('Fafa', 'fafa@gmail.com', 'pqrst');
+
+select*from users;
+
+create table courses(
+id int(11) auto_increment primary key,
+course varchar(50) not null,
+mentor varchar(50) not null,
+title varchar(50) not null
+);
+
+desc courses;
+
+insert into courses (course, mentor, title) values
+('C++', 'Ari', 'Dr.'),
+('C#', 'Ari', 'Dr.'),
+('C#', 'Ari', 'Dr.'),
+('CSS', 'Cania', 'S.Kom'),
+('HTML', 'Cania', 'S.Kom'),
+('Javascript', 'Cania', 'S.Kom'),
+('Phyton', 'Barry', 'S.T'),
+('Microphyton', 'Barry', 'S.T'),
+('Java', 'Darren', 'M.T'),
+('Ruby', 'Darren', 'M.T');
+
+select*from courses;
+
+create table userCourse(
+id_user int(11) ,
+id_course int(11));
+
+desc userCourse;
+
+insert into userCourse (id_user, id_course) values
+(1, 1), (1, 2), (1, 3), (2, 4), (2, 5), (2, 6), (3, 7), (3, 8), (3, 9), (4, 1), (4, 3), (4, 5), (5, 2), (5, 4), (5, 6), (6, 7), (6, 8), (6, 9);
+
+select*from userCourse;
+
+select users.id, users.username, courses.course, courses.mentor, courses.title from
+users inner join userCourse
+on users.id = userCourse.id_user
+inner join courses
+on userCourse.id_course = courses.id;
+
+select users.id, users.username, courses.course, courses.mentor, courses.title from
+users inner join userCourse
+on users.id = userCourse.id_user
+inner join courses
+on userCourse.id_course = courses.id
+where courses.title like 'S%';
+
+select users.id, users.username, courses.course, courses.mentor, courses.title from
+users inner join userCourse
+on users.id = userCourse.id_user
+inner join courses
+on userCourse.id_course = courses.id
+where courses.title not like 'S%';
+
+select courses.course, courses.mentor, courses.title, count(*) as jumlah_peserta from
+users inner join userCourse
+on users.id = userCourse.id_user
+inner join courses
+on userCourse.id_course = courses.id
+group by courses.course;
+
+select courses.mentor, count(*) as jumlah_peserta, count(*) * 2000000 as total_fee from
+users inner join userCourse
+on users.id = userCourse.id_user
+inner join courses
+on userCourse.id_course = courses.id
+group by courses.mentor;
